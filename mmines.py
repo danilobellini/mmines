@@ -20,8 +20,8 @@
 Musical Mines - A minesweeper game to help learning musical skills.
 """
 
-from mmgame.core import GameGrid
-from mmgame import (MIN_TILE_SIZE, PI, DEFAULT_GRID_SIZES, DSIZE, DCOLOR,
+from _mmines.core import GameGrid
+from _mmines import (MIN_TILE_SIZE, PI, DEFAULT_GRID_SIZES, DSIZE, DCOLOR,
                     NCOLOR)
 import wx
 import audiolazy as lz
@@ -756,6 +756,11 @@ class GameApp(wx.App):
         self.SetTopWindow(game_window)
         return True
 
-if __name__ == "__main__":
+player = None
+def main():
+    global player
     with lz.AudioIO() as player:
         GameApp(False).MainLoop()
+
+if __name__ == "__main__":
+    main()

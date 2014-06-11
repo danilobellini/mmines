@@ -32,7 +32,7 @@ Requirements
 Running
 -------
 
-Just call the ``mmines.py`` script.
+Just call the ``mmines`` script.
 
 ----
 
