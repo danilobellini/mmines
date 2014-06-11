@@ -21,6 +21,8 @@ Musical Mines
 
 A minesweeper game to help learning musical skills.
 
+.. image:: screenshot.png
+
 Requirements
 ------------
 

@@ -21,7 +21,7 @@
 from setuptools import setup
 import os, ast, re
 
-# Functions based on AudioLazy setup.py
+# Functions based or copied from AudioLazy setup.py
 
 def locals_from_exec(code):
   """ Run code in a qualified exec, returning the resulting locals dict """
@@ -39,7 +39,7 @@ def pseudo_import(fname):
   astree.body = [node for node in astree.body if is_d_assign(node)]
   return locals_from_exec(compile(astree, fname, mode="exec"))
 
-def read_rst_and_process(fname):
+def read_rst_and_process(fname, line_process):
   """
   The reStructuredText string in file ``fname``, without the starting ``..``
   comment and with ``line_process`` function applied to every line.
@@ -51,10 +51,22 @@ def read_rst_and_process(fname):
     next_idx = first_idx + 1
     first_idx = next(idx for idx, line in enumerate(data[next_idx:], next_idx)
                          if line.strip() and not line.startswith(" "))
-  return "\n".join(data[first_idx:])
+  return "\n".join(map(line_process, data[first_idx:]))
 
-def read_description(readme_file):
-  readme_data = read_rst_and_process(readme_file)
+def image_path_processor_factory(path):
+  """ Processor for concatenating the ``path`` to relative path images """
+  def processor(line):
+    markup = ".. image::"
+    if line.startswith(markup):
+      fname = line[len(markup):].strip()
+      if not(fname.startswith("/") or "://" in fname):
+        return "{} {}{}".format(markup, path, fname)
+    return line
+  return processor
+
+def read_description(readme_file, images_url):
+  updater = image_path_processor_factory(images_url)
+  readme_data = read_rst_and_process(readme_file, updater)
   title, descr, sections_and_ending = readme_data.split("\n\n", 2)
   sects = sections_and_ending.rsplit("----", 1)[0]
   return descr, "\n".join(block.strip() for block in ["", title, "", sects])
@@ -64,10 +76,11 @@ path = os.path.split(__file__)[0]
 
 fname_init = os.path.join(path, "mmines.py")
 fname_readme = os.path.join(path, "README.rst")
+images_url = "https://raw.github.com/danilobellini/mmines/master/"
 
 metadata = {k.strip("_") : v for k, v in pseudo_import(fname_init).items()}
 metadata["description"], metadata["long_description"] = \
-  read_description(fname_readme)
+  read_description(fname_readme, images_url)
 metadata["classifiers"] = """
 Development Status :: 3 - Alpha
 Environment :: Win32 (MS Windows)
