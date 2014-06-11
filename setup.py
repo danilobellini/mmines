@@ -68,6 +68,27 @@ fname_readme = os.path.join(path, "README.rst")
 metadata = {k.strip("_") : v for k, v in pseudo_import(fname_init).items()}
 metadata["description"], metadata["long_description"] = \
   read_description(fname_readme)
+metadata["classifiers"] = """
+Development Status :: 3 - Alpha
+Environment :: Win32 (MS Windows)
+Environment :: X11 Applications
+Intended Audience :: Education
+Intended Audience :: End Users/Desktop
+Intended Audience :: Other Audience
+License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Natural Language :: English
+Operating System :: Microsoft :: Windows
+Operating System :: POSIX :: Linux
+Programming Language :: Python
+Programming Language :: Python :: 2
+Programming Language :: Python :: 2.7
+Programming Language :: Python :: 2 :: Only
+Topic :: Artistic Software
+Topic :: Education
+Topic :: Games/Entertainment
+Topic :: Games/Entertainment :: Puzzle Games
+Topic :: Multimedia
+""".strip().splitlines()
 metadata["author_email"] = "danilo.bellini@gmail.com"
 metadata["url"] = "https://github.com/danilobellini/mmines"
 metadata["license"] = "GPLv3"
@@ -76,4 +97,5 @@ metadata["packages"] = ["_mmines"]
 metadata["py_modules"] = ["mmines"]
 metadata["entry_points"] = {"console_scripts": ["mmines=mmines:main"]}
 metadata["install_requires"] = ["audiolazy"]
+
 setup(**metadata)
